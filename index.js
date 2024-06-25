@@ -11,7 +11,7 @@ app.use(cors());
 app.use('/uploads', express.static('uploads'));
 
 // Usar rotas definidas no router.js
-app.use(router);
+app.use("/", router);
 
 connection();
 

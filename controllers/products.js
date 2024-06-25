@@ -12,8 +12,8 @@ const getProduct = async (req, res) => {
 
     const productsWithImageUrl = products.map((product) => {
     const imageUrl = product.image ? `https://${req.get('host')}/uploads/${product.image}` : "";
-    return { ...product._doc, imageUrl };
-  })
+    return { ...product._doc, imageUrl }
+ })
   
   res.status(200).json({ productsWithImageUrl });
 }
