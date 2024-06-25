@@ -4,20 +4,31 @@ const mongoose = require("mongoose");
 const path = require('path');
 
 const getProduct = async (req, res) => {
-    const products = await Product.find();
+    const {type} = req.query;
 
-    if (!products.length) {
-        return res.status(404).json({ msg: "Nenhum produto!" });
+    try {
+        let products;
+        if(type){
+            products = await Product.find( {type} );
+        }else{
+            products = await Product.find();
+        }
+
+        if (!products.length) {
+            return res.status(404).json({ msg: "Nenhum produto!" });
+        }
+
+        const shuffledProducts = products.sort(() => 0.5 - Math.random())
+
+        const productsWithImageUrl = shuffledProducts.map((product) => {
+        const imageUrl = product.image ? `https://${req.get('host')}/uploads/${product.image}` : "";
+        return { ...product._doc, imageUrl }});
+
+        res.status(200).json({ productsWithImageUrl });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ msg: "Erro ao buscar produtos." });
     }
-
-    const shuffledProducts = products.sort(() => 0.5 - Math.random())
-
-    const productsWithImageUrl = shuffledProducts.map((product) => {
-    const imageUrl = product.image ? `https://${req.get('host')}/uploads/${product.image}` : "";
-    return { ...product._doc, imageUrl }
- })
-  
-  res.status(200).json({ productsWithImageUrl });
 }
 
 const getProductById = async (req, res) => {
