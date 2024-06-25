@@ -10,7 +10,9 @@ const getProduct = async (req, res) => {
         return res.status(404).json({ msg: "Nenhum produto!" });
     }
 
-    const productsWithImageUrl = products.map((product) => {
+    const shuffledProducts = products.sort(() => 0.5 - Math.random())
+
+    const productsWithImageUrl = shuffledProducts.map((product) => {
     const imageUrl = product.image ? `https://${req.get('host')}/uploads/${product.image}` : "";
     return { ...product._doc, imageUrl }
  })
