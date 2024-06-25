@@ -11,8 +11,8 @@ const getProduct = async (req, res) => {
     }
 
     const productsWithImageUrl = products.map((product) => {
-    const imageUrl = product.image ? `https://backend-pi-virid.vercel.app/uploads/${product.image}` : "";
-    return ({...product.toObject(), imageUrl})
+    const imageUrl = product.image ? `https://${req.get('host')}/uploads/${product.image}` : "";
+    return { ...product._doc, imageUrl };
   })
   
   res.status(200).json({ productsWithImageUrl });
