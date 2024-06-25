@@ -3,7 +3,7 @@ const fs = require('fs');
 const mongoose = require("mongoose");
 const path = require('path');
 
-const getProduct = async (req, res) => {
+const getProduct = async (req, res) => {    
     const {type} = req.query;
 
     try {
@@ -29,6 +29,9 @@ const getProduct = async (req, res) => {
         console.error(error);
         res.status(500).json({ msg: "Erro ao buscar produtos." });
     }
+
+  
+  res.status(200).json({ productsWithImageUrl });
 }
 
 const getProductById = async (req, res) => {
