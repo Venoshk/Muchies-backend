@@ -6,7 +6,7 @@ const Controllers = require("./controllers/products")
 
 router.use("/uploads", express.static(path.join(__dirname, 'uploads')));
 
-router.get("/", Controllers.getProduct);
+router.get("/product", Controllers.getProduct);
 router.get("/product/:id", Controllers.getProductById);
 router.post("/auth/register", upload.single("image"), Controllers.createProduct);
 router.post("/atualizar/product/:id", upload.single("image"), Controllers.updateProduct)

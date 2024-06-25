@@ -24,7 +24,7 @@ const getProduct = async (req, res) => {
         const imageUrl = product.image ? `https://${req.get('host')}/uploads/${product.image}` : "";
         return { ...product._doc, imageUrl }});
 
-        res.status(200).json({ productsWithImageUrl });
+        res.status(200).json({products: productsWithImageUrl });
     } catch (error) {
         console.error(error);
         res.status(500).json({ msg: "Erro ao buscar produtos." });
