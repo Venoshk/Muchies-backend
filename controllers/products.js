@@ -30,8 +30,6 @@ const getProduct = async (req, res) => {
         res.status(500).json({ msg: "Erro ao buscar produtos." });
     }
 
-  
-  res.status(200).json({ productsWithImageUrl });
 }
 
 const getProductById = async (req, res) => {
