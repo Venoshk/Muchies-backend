@@ -4,15 +4,24 @@ const mongoose = require("mongoose");
 const path = require('path');
 
 const getProduct = async (req, res) => {    
-    const {type} = req.query;
+    const {type, search} = req.query;
 
     try {
-        let products;
+        let products
+        let query = {};
+
         if(type){
+            query.type = type;
             products = await Product.find( {type} );
         }else{
             products = await Product.find();
         }
+
+        if (search) {
+            query.type = { $regex: search, $options: 'i' }; // 'i' para case-insensitive
+        }
+
+        products = await Product.find(query);
 
         if (!products.length) {
             return res.status(404).json({ msg: "Nenhum produto!" });
@@ -24,7 +33,7 @@ const getProduct = async (req, res) => {
         const imageUrl = product.image ? `https://${req.get('host')}/uploads/${product.image}` : "";
         return { ...product._doc, imageUrl }});
 
-        res.status(200).json({products: productsWithImageUrl });
+        res.json({products: productsWithImageUrl });
     } catch (error) {
         console.error(error);
         res.status(500).json({ msg: "Erro ao buscar produtos." });
@@ -186,5 +195,5 @@ module.exports = {
     getProductById,
     createProduct,
     deleteProduct,
-    updateProduct
+    updateProduct,
 }
