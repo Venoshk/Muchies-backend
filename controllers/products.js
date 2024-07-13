@@ -12,7 +12,6 @@ const getProduct = async (req, res) => {
 
         if(type){
             query.type = type;
-            products = await Product.find( {type} );
         }else{
             products = await Product.find();
         }

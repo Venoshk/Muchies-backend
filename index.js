@@ -15,5 +15,5 @@ app.use("/",router);
 
 connection();
 
-const PORT = process.env.PORT || 4004;
+const PORT = process.env.PORT || 3003;
 app.listen(PORT, () => console.log(`Server is running on http://localhost:${PORT}`));
