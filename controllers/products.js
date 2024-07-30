@@ -4,18 +4,11 @@ const mongoose = require("mongoose");
 const path = require('path');
 
 const getProduct = async (req, res) => {    
-    const {type, search} = req.query;
+    const { search } = req.query;
 
     try {
         let products
         let query = {};
-
-        if(type){
-            query.type = type;
-            products = await Product.find( {type} );
-        }else{
-            products = await Product.find();
-        }
 
         if (search) {
             query.type = { $regex: search, $options: 'i' }; // 'i' para case-insensitive
@@ -42,24 +35,27 @@ const getProduct = async (req, res) => {
 }
 
 const getProductById = async (req, res) => {
-    const {id} = req.params
-
-    if(!mongoose.Types.ObjectId.isValid(id)){
-        return res.status(404).json({msg: 'Protudo não encontrado!'})
+    const { id } = req.params;
+  
+    if (!mongoose.Types.ObjectId.isValid(id)) {
+      return res.status(404).json({ msg: 'Produto não encontrado!' });
     }
-
+  
     try {
-        const product = await Product.findById(id);
+      const product = await Product.findById(id)
+      
+      if(!product){
+        return res.status(404).json(null);
+      }
 
-        if(!product){
-            return res.status(404).json({msg: 'Protudo não encontrado!'})
-        }
+      const imageUrl = product.image ? `https://${req.get('host')}/uploads/${product.image}` : ''
 
-        return res.status(200).json({msg: product});
+      return res.json({product: {...product._doc, imageUrl}})
     } catch (error) {
-        res.status(400).json({msg: 'Houve algo, tente novamente main tarde'})
+      console.error(error);
+      res.status(400).json({ msg: 'Houve algo, tente novamente mais tarde' });
     }
-}
+  };
 
 const createProduct = async (req, res) =>{
     const { name, description, price, type } = req.body;
